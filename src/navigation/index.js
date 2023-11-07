@@ -5,14 +5,20 @@ import Contacts from '../screens/ContactScreen';
 import Calling from '../screens/CallingScreen';
 import CallScreen from '../screens/CallScreen';
 import IncomingCall from '../screens/IncomingCallScreen';
+import LoginScreen from '../screens/LoginScreen';
+import { storage } from '../constant';
 
 const Stack = createNativeStackNavigator();
 
 
 const Navigation = () => {
+    console.log('in Navigation')
+    const route = storage.getBoolean('logged_in') ? 'Contacts' : 'Login';
+
     return (
         <NavigationContainer >
-            <Stack.Navigator initialRouteName='Contacts'>
+            <Stack.Navigator initialRouteName={route}>
+                <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
                 <Stack.Screen name='Contacts' component={Contacts} options={{ headerShown: false }} />
                 <Stack.Screen name='Calling' component={Calling} options={{ headerShown: false }} />
                 <Stack.Screen name='CallScreen' component={CallScreen} options={{ headerShown: false }} />

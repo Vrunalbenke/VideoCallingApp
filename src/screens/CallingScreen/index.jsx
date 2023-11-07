@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View,Text, StyleSheet, TouchableOpacity} from 'react-native';
 import CallActionBox from '../../components/CallActionBox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,6 +9,11 @@ const Calling = ({route,navigation}) => {
     const goBack = () => {
         navigation.pop();
     }
+
+    useEffect(() =>{
+
+    },[])
+
 
     return(
         <View style={styles.rootCalling}>

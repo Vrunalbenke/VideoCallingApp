@@ -1,9 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import dummyContact from '../../asset/Data/contact.json';
+import {APP_NAME,ACC_NAME, storage } from '../../constant';
+import {Voximplant} from 'react-native-voximplant';
+
+const {width} = Dimensions.get('screen');
 
 const Contacts = ({ navigation }) => {
-
+    const voximplant = Voximplant.getInstance();
+    (async()=>{
+        const username = storage.getString('username');
+        const password = storage.getString('password');
+        console.log(username," ",password);
+   
+        const status = await voximplant.getClientState();
+        if (status === Voximplant.ClientState.DISCONNECTED){
+            await voximplant.connect();
+            const FQUsername = `${username}@${APP_NAME}.${ACC_NAME}.voximplant.com`
+            await voximplant.login(FQUsername, password);
+        }
+        console.log(status,"🚦🚦🚦🚦🚦🚦🚦");
+        console.log(storage.getBoolean('logged_in'),"🚀🚀🚀🚀");
+    })();
+    
     const [searchTerm, setSearchTerm] = useState('');
     const [filterContacts, setFilterContacts] = useState(dummyContact);
     const SearchPlaceholder = `${dummyContact.length} contacts`;
@@ -23,6 +42,20 @@ const Contacts = ({ navigation }) => {
 
     return (
         <View style={styles.ParentCont}>
+            <TouchableOpacity style={styles.TOP}
+                onPress={ async () => {
+                    storage.set('logged_in',false);
+                    await voximplant.disconnect();
+                    navigation.reset({
+                        index:0,
+                        routes:[{
+                            name:'Login'
+                        }]
+                    })
+                }}
+            >
+                <Text style={styles.BTNText}>Logout</Text>
+            </TouchableOpacity>
             <TextInput
                 style={styles.Searchbar}
                 placeholder={SearchPlaceholder}
@@ -83,6 +116,21 @@ const styles = StyleSheet.create({
     },
     footer: {
         height: 12,
+    },
+    TOP: {
+        padding: 10,
+        backgroundColor: '#283c86',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        width: width * 0.8,
+        margin: 15
+    },
+    BTNText: {
+        color: '#fff',
+        fontSize: 30,
+        fontWeight: '500',
+
     }
 });
 
