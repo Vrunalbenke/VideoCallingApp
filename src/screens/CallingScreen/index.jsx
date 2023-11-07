@@ -1,19 +1,109 @@
-import React, { useEffect } from 'react';
-import {View,Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {View,Text, StyleSheet, TouchableOpacity,Platform,Alert,PermissionsAndroid} from 'react-native';
 import CallActionBox from '../../components/CallActionBox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Voximplant} from 'react-native-voximplant';
+
+const permissions = [
+    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    PermissionsAndroid.PERMISSIONS.CAMERA,
+];
+
+
 const Calling = ({route,navigation}) => {
-    
+    const [permissionGranted,setPermissionGranted] = useState(false);
+    const [ callState, setCallState] = useState('Calling...');
     const {name,number} = route?.params;
+    const voximplant = Voximplant.getInstance();
+    const call = useRef();
 
     const goBack = () => {
         navigation.pop();
     }
 
     useEffect(() =>{
+        const requestPermissions = async () => {
+            const granted = await PermissionsAndroid.requestMultiple(permissions);
+            const recordAudioGranted =
+            granted[PermissionsAndroid.PERMISSIONS.RECORD_AUDIO] !== 'granted';
+            const cameraGranted =
+            granted[PermissionsAndroid.PERMISSIONS.CAMERA] !== 'granted';
+            if (!cameraGranted || !recordAudioGranted) {
+                Alert.alert('Permissions not granted');
+            } else {
+                setPermissionGranted(true);
+            }
+        };
 
+        if(Platform.OS === 'android'){
+            requestPermissions();
+        }
+        else{
+            setPermissionGranted(true);
+        }
     },[])
 
+    useEffect( ()=>{
+        if(!permissionGranted){
+            return
+        }
+        
+        const callSetting = {
+            video: {
+                sendVideo: true,
+                receiveVideo: true,
+                },
+        };
+
+
+
+        const makeCall = async () => {
+            call.current = await voximplant.call(name,callSetting)
+            subscribeToCallEvent();
+        }
+
+        const subscribeToCallEvent = ()=>{
+            call.current.on(Voximplant.CallEvents.Failed, callEvent => {
+                showCallError(callEvent.reason);
+            });
+
+            call.current.on(Voximplant.CallEvents.ProgressToneStart, callEvent => {
+                setCallState('Ringing!!...');
+            });
+
+            call.current.on(Voximplant.CallEvents.Connected,callEvent => {
+                setCallState('Connected!')
+            })
+
+            call.current.on(Voximplant.CallEvents.Disconnected,callEvent => {
+                navigation.navigate('Contacts');
+            })
+        }
+
+        const showCallError = (reason) =>{
+            Alert.alert(
+                "Call failed",
+                `Reason:${reason}`,
+                [{
+                    text: 'Ok',
+                    onPress: navigation.navigate('Contacts')
+                }]
+            )
+        }
+
+        makeCall();
+
+        return () => {
+            call.current.off(Voximplant.CallEvents.Failed);
+            call.current.off(Voximplant.CallEvents.ProgressToneStart);
+            call.current.off(Voximplant.CallEvents.Connected);
+            call.current.off(Voximplant.CallEvents.Disconnected);
+        }
+    },[permissionGranted])
+
+    const onHangupPress = () =>{
+        call.current.hangup();
+    }
 
     return(
         <View style={styles.rootCalling}>
@@ -24,10 +114,10 @@ const Calling = ({route,navigation}) => {
             </TouchableOpacity>
             <View style={styles.CallPreview}> 
             <Text style={styles.name}>{name}</Text>
-            <Text style={styles.phone}>ringing +91-{number}</Text>
+            <Text style={styles.phone}>{callState} +91-{number}</Text>
             </View>
             
-            <CallActionBox/>            
+            <CallActionBox onHangupPress={onHangupPress}/>            
         </View>
     )
 }

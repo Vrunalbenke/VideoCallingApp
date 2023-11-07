@@ -1,15 +1,15 @@
 [
     {
         "user_id": "1",
-        "user_name": "user1",
-        "user_display_name": "User 1",
+        "user_name": "Vrunal",
+        "user_display_name": "Vrunal",
         "user_phone_number": "98765 43210"
 
     },
     {
         "user_id": "2",
-        "user_name": "user2",
-        "user_display_name": "User 2",
+        "user_name": "Pratham",
+        "user_display_name": "Pratham",
         "user_phone_number": "87654 32109"
     },
     {

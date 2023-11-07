@@ -11,7 +11,6 @@ const Contacts = ({ navigation }) => {
     (async()=>{
         const username = storage.getString('username');
         const password = storage.getString('password');
-        console.log(username," ",password);
    
         const status = await voximplant.getClientState();
         if (status === Voximplant.ClientState.DISCONNECTED){
@@ -19,8 +18,6 @@ const Contacts = ({ navigation }) => {
             const FQUsername = `${username}@${APP_NAME}.${ACC_NAME}.voximplant.com`
             await voximplant.login(FQUsername, password);
         }
-        console.log(status,"🚦🚦🚦🚦🚦🚦🚦");
-        console.log(storage.getBoolean('logged_in'),"🚀🚀🚀🚀");
     })();
     
     const [searchTerm, setSearchTerm] = useState('');
@@ -39,6 +36,16 @@ const Contacts = ({ navigation }) => {
 
         })
     }
+
+    useEffect(() => {
+        voximplant.on(Voximplant.ClientEvents.IncomingCall, incomingCallEvent => {
+            navigation.navigate("IncomingCall", {call : incomingCallEvent.call});
+        });
+
+        return () => {
+            voximplant.off(Voximplant.ClientEvents.IncomingCall);
+        };
+    },[])
 
     return (
         <View style={styles.ParentCont}>

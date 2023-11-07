@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
-const CallActionBox = () => {
+const CallActionBox = ({onHangupPress}) => {
     const navigation = useNavigation();
     const [toggleCamera, setToggleCamera] = useState(false);
     const [toggleMic, setToggleMic] = useState(false);
@@ -19,9 +19,6 @@ const CallActionBox = () => {
     const ToggleCamera = () => {
         console.log("ToggleCamera")
         setToggleCamera((currentValue) => !currentValue)
-    }
-    const EndCall = () => {
-        navigation.pop();
     }
 
     return (
@@ -49,7 +46,7 @@ const CallActionBox = () => {
                     <Ionicons name={toggleCamera ? "videocam-outline" : "videocam-off-outline"} size={40} color={'#fff'}></Ionicons>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={EndCall} style={[styles.iconContainer, { backgroundColor: "rgb(213, 43, 43)" }]}>
+                <TouchableOpacity onPress={onHangupPress} style={[styles.iconContainer, { backgroundColor: "rgb(213, 43, 43)" }]}>
                     <MaterialIcon name="call-end" size={40} color={'#fff'} />
                 </TouchableOpacity>
 

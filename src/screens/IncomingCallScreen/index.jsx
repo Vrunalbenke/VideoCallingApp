@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Voximplant} from 'react-native-voximplant';
 
-const IncomingCall = () => {
+const IncomingCall = ({route,navigation}) => {
+    const[caller,setCaller] = useState('');
+    const {call} = route.params;
+    const voximplant = Voximplant.getInstance();
 
+    useEffect(() => {
+
+        setCaller(call.getEndpoints()[0].displayName);
+        call.on(Voximplant.CallEvents.Disconnected,callEvents =>{
+            navigation.navigate('Contacts');
+        })
+
+        return () => {
+            call.off(Voximplant.CallEvents.Disconnected);
+        }
+    })
     const onDecline = () =>{
-        console.warn("Declined");
+        call.decline();
     }
 
     const onAccept = () =>{
@@ -18,7 +33,7 @@ const IncomingCall = () => {
     return (
         <LinearGradient colors={['#aa4b6b', "#6b6b83", '#3b8d99']} style={styles.linearGradient}>
               <View style={styles.CallPreview}> 
-                <Text style={styles.name}>Vrunal</Text>
+                <Text style={styles.name}>{caller}</Text>
                 <Text style={styles.phone}>ringing +91-7972068752</Text>
             </View>
 
