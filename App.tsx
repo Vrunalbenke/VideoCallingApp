@@ -1,13 +1,12 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import React from 'react';
-import Contacts from './src/screens/ContactScreen';
-import Calling from './src/screens/CallingScreen';
+import Navigation from './src/navigation';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.root}>
-      <Calling/>
-    </SafeAreaView>
+    <View style={styles.root}>
+      <Navigation/>
+    </View>
   );
 };
 

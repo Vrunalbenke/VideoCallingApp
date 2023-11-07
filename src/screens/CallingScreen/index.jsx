@@ -1,48 +1,28 @@
 import React from 'react';
 import {View,Text, StyleSheet, TouchableOpacity} from 'react-native';
+import CallActionBox from '../../components/CallActionBox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+const Calling = ({route,navigation}) => {
+    
+    const {name,number} = route?.params;
 
-const Calling = () => {
-
+    const goBack = () => {
+        navigation.pop();
+    }
 
     return(
         <View style={styles.rootCalling}>
+            <TouchableOpacity style={styles.backTOP}
+            onPress={goBack}
+            >
+                <Ionicons name='chevron-back-outline'  size={30} />
+            </TouchableOpacity>
             <View style={styles.CallPreview}> 
-            <Text style={styles.name}>Vrunal</Text>
-            <Text style={styles.phone}>ringing +91-7972068752</Text>
+            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.phone}>ringing +91-{number}</Text>
             </View>
-
-            <View style={styles.bottomContainer}>
-
-                <View style={styles.slideUpContainer}>
-
-                    <TouchableOpacity style={styles.slideUp}>
-                        <Ionicons name="chevron-up-outline" size={30} color={"#fff"}/>
-                    </TouchableOpacity>
-
-                </View>
-
-                <View style={styles.buttonsContainer}>
-
-                    <TouchableOpacity style={styles.iconContainer}>
-                        <Ionicons name="camera-reverse-outline" size={42} color={'#fff'}></Ionicons>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.iconContainer}>
-                        <Ionicons name="mic-off-outline" size={40} color={'#fff'}></Ionicons>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.iconContainer}>
-                        <Ionicons name="videocam-off-outline" size={40} color={'#fff'}></Ionicons>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={[styles.iconContainer,{backgroundColor:"rgb(213, 43, 43)"}]}>
-                        <MaterialIcon  name="call-end" size={40} color={'#fff'}/>
-                    </TouchableOpacity>
-
-                </View>
-            </View>
+            
+            <CallActionBox/>            
         </View>
     )
 }
@@ -54,6 +34,7 @@ const styles = StyleSheet.create({
     rootCalling:{
         flex:1,
         backgroundColor:'#acd2f6',
+        position:'relative'
     },
     CallPreview:{
         flex:1,
@@ -70,48 +51,10 @@ const styles = StyleSheet.create({
     phone:{
         fontSize:20
     },
-    bottomContainer:{
-        backgroundColor:'#333333',
-        paddingHorizontal:30,
-        paddingBottom:30,
-        paddingTop:10,
-        borderTopLeftRadius:30,
-        borderTopRightRadius:30,
+    backTOP:{
+        position:'absolute',
+        top:20,
+        left:10,
+        zIndex:1
     },
-    slideUpContainer:{
-        justifyContent:'center',
-        alignItems:'center',
-        paddingBottom:10,
-        width:"100%",
-    },
-    slideUp:{
-        width:80,
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    buttonsContainer:{
-       
-        flexDirection:'row',
-        justifyContent:'space-between'
-    },
-    iconContainer:{
-        backgroundColor:'#3e3e3e',
-        padding:8,
-        borderRadius:30
-    },
-    // micOff:{
-    //     backgroundColor:'#3e3e3e',
-    //     padding:8,
-    //     borderRadius:30
-    // },
-    // cameraOff:{
-    //     backgroundColor:'#3e3e3e',
-    //     padding:8,
-    //     borderRadius:30
-    // },
-    // callEnd:{
-    //     padding:8,
-    //     borderRadius:30,
-    //     backgroundColor:'rgb(213, 43, 43)',
-    // },
 });
