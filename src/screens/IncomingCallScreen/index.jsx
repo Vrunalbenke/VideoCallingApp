@@ -26,7 +26,10 @@ const IncomingCall = ({route, navigation}) => {
   };
 
   const onAccept = () => {
-    console.warn('Accepted');
+    navigation.navigate('Calling',{
+        call,
+        isIncomingCall:true,
+    })
   };
 
   return (
