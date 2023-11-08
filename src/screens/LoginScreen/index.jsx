@@ -21,7 +21,6 @@ const LoginScreen = ({ navigation }) => {
                 navigation.navigate('Contacts')
             }
         }
-
         connect();
     }, [])
 

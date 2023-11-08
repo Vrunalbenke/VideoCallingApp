@@ -3,11 +3,14 @@ import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Dimensio
 import dummyContact from '../../asset/Data/contact.json';
 import {APP_NAME,ACC_NAME, storage } from '../../constant';
 import {Voximplant} from 'react-native-voximplant';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const {width} = Dimensions.get('screen');
 
 const Contacts = ({ navigation }) => {
     const voximplant = Voximplant.getInstance();
+
+    /*** IIFE ***/
     (async()=>{
         const username = storage.getString('username');
         const password = storage.getString('password');
@@ -19,10 +22,16 @@ const Contacts = ({ navigation }) => {
             await voximplant.login(FQUsername, password);
         }
     })();
+    /*** IIFE ***/
+
+
+
+
     
     const [searchTerm, setSearchTerm] = useState('');
     const [filterContacts, setFilterContacts] = useState(dummyContact);
     const SearchPlaceholder = `${dummyContact.length} contacts`;
+    
 
     useEffect(() => {
         const newContact = dummyContact.filter((contact) => contact.user_display_name.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -49,7 +58,9 @@ const Contacts = ({ navigation }) => {
 
     return (
         <View style={styles.ParentCont}>
-            <TouchableOpacity style={styles.TOP}
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>VideoCaller</Text>
+                <TouchableOpacity style={styles.TOP}
                 onPress={ async () => {
                     storage.set('logged_in',false);
                     await voximplant.disconnect();
@@ -61,8 +72,9 @@ const Contacts = ({ navigation }) => {
                     })
                 }}
             >
-                <Text style={styles.BTNText}>Logout</Text>
+                <Ionicons name="log-out-outline" size={30} color={"#283c86"}/>
             </TouchableOpacity>
+            </View>
             <TextInput
                 style={styles.Searchbar}
                 placeholder={SearchPlaceholder}
@@ -97,7 +109,7 @@ const styles = StyleSheet.create({
     ParentCont: {
         flex: 1,
         paddingHorizontal: 15,
-        paddingTop: 25
+        // paddingTop: 25
     },
     Searchbar: {
         backgroundColor: '#e2e2e2',
@@ -124,20 +136,24 @@ const styles = StyleSheet.create({
     footer: {
         height: 12,
     },
-    TOP: {
-        padding: 10,
-        backgroundColor: '#283c86',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        width: width * 0.8,
-        margin: 15
+    headerContainer:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        margin:15
     },
-    BTNText: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: '500',
-
-    }
+    headerText:{
+        fontSize:30,
+        fontWeight:'600',
+        color:"#283c86"
+    },
+    TOP: {
+        padding: 3,
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        // borderRadius: 10,
+        // width: width * 0.8,
+        // margin: 15
+    },
 });
 
