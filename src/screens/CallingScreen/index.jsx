@@ -60,7 +60,6 @@ const Calling = ({ route, navigation }) => {
 
         const makeCall = async () => {
             call.current = await voximplant.call(name, callSetting)
-            console.log(call.current, "🛟🛟🛟🛟🛟🛟");
             subscribeToCallEvent();
         }
 

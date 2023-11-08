@@ -4740,6 +4740,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-react-native@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.npmjs.org/lottie-react-native/-/lottie-react-native-6.4.0.tgz"
+  integrity sha512-wFO/gLPN1KliyznBa8OtYWkc9Vn9OEmIg1/b1536KANFtGaFAeoAGhijVxYKF3UPKJgjJYFmqg0W//FVrSXj+g==
+
 lru-cache@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz"
@@ -5682,7 +5687,7 @@ react-native-voximplant@^1.40.1:
   resolved "https://registry.npmjs.org/react-native-voximplant/-/react-native-voximplant-1.40.1.tgz"
   integrity sha512-cB8fXlPnc4qqqyxxgkcH2YB0Ody4lMlv4cQkhyGcxXcbxvG/tS+Q3dQt8Ykdd2S72oiCvU2Msq2yZrux4E1RAw==
 
-react-native@*, "react-native@>= 0.47.0", react-native@>=0.71.0, react-native@0.72.6:
+react-native@*, "react-native@>= 0.47.0", react-native@>=0.46, react-native@>=0.71.0, react-native@0.72.6:
   version "0.72.6"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.6.tgz"
   integrity sha512-RafPY2gM7mcrFySS8TL8x+TIO3q7oAlHpzEmC7Im6pmXni6n1AuufGaVh0Narbr1daxstw7yW7T9BKW5dpVc2A==
